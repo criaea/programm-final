@@ -1,0 +1,2070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perception Evaluation</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Comfortaa&family=EB+Garamond&family=Kalam&family=Oswald&family=Poppins:wght@400;500;600;700&family=Raleway&family=Roboto+Mono&family=Special+Elite&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: #f0f4f9; 
+            color: #333;
+            line-height: 1.6;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 20px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- Cover Page Styles --- */
+        #coverPage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to top */
+            z-index: 2000;
+            transition: opacity 1.5s ease-in-out, visibility 1.5s;
+            visibility: visible;
+            opacity: 1;
+            padding: 20px;
+            overflow-y: auto; /* Allow scrolling if content is too tall */
+        }
+
+        #coverPage.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .cover-content {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .cover-image img {
+            max-width: 350px;
+            height: auto;
+            margin-bottom: 0.5rem; /* Reduced space */
+        }
+
+        .cover-image-caption {
+            font-size: 0.8rem;
+            font-style: italic;
+            color: #555;
+            margin-bottom: 2rem;
+        }
+
+        .cover-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem; /* Reduced space */
+            letter-spacing: 1px;
+            color: #2c3e50;
+        }
+        
+        .cover-copyright {
+            font-size: 0.8rem;
+            font-style: italic;
+            color: #555;
+            margin-bottom: 1.5rem;
+        }
+
+        .cover-subtitle-main {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+            white-space: nowrap; /* Keep on one line */
+        }
+        
+        .cover-subtitle-list {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-style: normal;
+            margin-bottom: 2rem;
+            color: #555;
+            white-space: nowrap; /* Keep on one line */
+        }
+
+        .cover-subtitle {
+            font-family: 'Raleway', sans-serif;
+            font-size: 1rem;
+            margin-bottom: 2.5rem;
+            color: #555;
+            line-height: 1.7;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: left; /* Make long text left-aligned */
+        }
+
+        #startBtn {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 15px 35px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(37, 117, 252, 0.3);
+        }
+
+        #startBtn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(37, 117, 252, 0.4);
+        }
+        /* --- End Cover Page Styles --- */
+
+
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-size: cover;
+            background-position: center;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        #bg-1 {
+            opacity: 1;
+        }
+
+        #bg-2 {
+            opacity: 0;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto; 
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+        }
+        
+        h1, h2, h3 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        
+        h1 { margin-bottom: 20px; font-size: 2rem; font-weight: 700; }
+        h2 { margin-bottom: 30px; font-size: 1.75rem; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px;}
+        h3 { font-size: 1.2rem; font-weight: 600; }
+
+        #mainTitle {
+            display: none; /* Hide "Perception Evaluation" */
+        }
+        
+        .page-subtitle {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem; /* A bit smaller than cover title */
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+            margin-top: 1rem;
+            letter-spacing: 1px;
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        .intro-image-container {
+            text-align: center;
+            margin-bottom: 5px; /* Reduced space */
+            margin-top: 5px; /* Reduced space */
+        }
+
+        .intro-image-container img {
+            max-width: 450px;
+            width: 100%;
+            height: auto;
+        }
+
+
+        .instructions {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            font-size: 1rem;
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        .instructions p {
+            margin: 0;
+            line-height: 1.7;
+        }
+        
+        .instructions p:first-child {
+            margin-bottom: 10px;
+        }
+        
+        /* New Question Design */
+        .question-container {
+            margin-bottom: 25px;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .question-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(37, 117, 252, 0.3);
+        }
+        
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #2c3e50;
+            font-size: 1.25rem;
+            text-align: center;
+            line-height: 1.5;
+        }
+        
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* --- Break Question Styles --- */
+        .break-question-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .image-options-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .image-option {
+            cursor: pointer;
+            border: 3px solid transparent;
+            border-radius: 12px;
+            padding: 10px;
+            transition: all 0.3s ease;
+            background-color: rgba(248, 249, 250, 0.8);
+        }
+        
+        .image-option img {
+            width: 100%;
+            max-width: 150px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .image-option span {
+            display: block;
+            font-weight: 600;
+            color: #34495e;
+        }
+
+        .image-option.selected, .color-option.selected {
+            border-color: #2575fc;
+            background-color: #e3f2fd;
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(37, 117, 252, 0.2);
+        }
+
+        .color-options-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            max-width: 380px;
+            margin: 20px auto;
+        }
+
+        .color-option {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 4px solid transparent;
+            transition: all 0.3s ease;
+        }
+        /* --- End Break Question Styles --- */
+        
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border: 2px solid #e0e6ed;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: rgba(248, 249, 250, 0.8);
+        }
+        
+        .option:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            border-color: #a0b4c8;
+        }
+        
+        .option.selected {
+            background-color: #e3f2fd;
+            border-color: #2575fc;
+            box-shadow: 0 8px 25px rgba(37, 117, 252, 0.2);
+            transform: translateY(-4px);
+        }
+
+        .option.selected label {
+            color: #2575fc;
+            font-weight: 600;
+        }
+        
+        .option input {
+            display: none; /* Hide the radio button */
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .dev-navigation {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-start;
+        }
+        
+        button {
+            padding: 12px 28px;
+            background: linear-gradient(145deg, #5a29e4, #3a68d8);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 
+                        inset 0 1px 1px rgba(255, 255, 255, 0.2);
+            text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+            white-space: nowrap;
+        }
+        
+        button:hover {
+            background: linear-gradient(145deg, #6b3ef0, #4c7ce0);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 
+                        0 3px 6px rgba(0, 0, 0, 0.08),
+                        inset 0 1px 1px rgba(255, 255, 255, 0.2);
+        }
+
+        button:active {
+            transform: translateY(1px);
+             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 
+                        inset 0 2px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        button:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            color: #7f8c8d;
+            text-shadow: none;
+        }
+
+        #devSkipBtn {
+            background: #f39c12;
+        }
+        
+        .progress {
+            margin-bottom: 30px;
+            position: relative;
+            height: 28px;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.05);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            width: 0%;
+            transition: width 0.5s ease-out;
+            border-radius: 14px;
+            box-shadow: 0 0 10px rgba(37, 117, 252, 0.5);
+        }
+        
+        .progress-text {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 100%;
+            line-height: 28px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: white;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.6), 0 0 5px rgba(0,0,0,0.4); /* Stronger, combined shadow for readability */
+        }
+        
+        .results, .profile-chart, .detail-page, .path-selection {
+            display: none;
+            margin-top: 40px;
+            animation: fadeIn 1s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* --- Path Selection Styles (REMOVED) --- */
+        
+        .chart-wrapper {
+             width: 100%;
+        }
+
+        .chart-container {
+            margin: 30px auto;
+            height: 500px;
+            width: 100%;
+            position: relative; 
+        }
+
+        /* Engaging New Profile Chart Styles (REMOVED) */
+
+        /* --- Tournament Styles (REMOVED) --- */
+        
+        /* Result & Prediction Section */
+        .your-result-section, .prediction-section { 
+            margin-top: 40px; 
+            text-align: center; 
+            border-top: 4px solid #2c3e50; 
+            padding-top: 30px; 
+            margin-top: 40px;
+        }
+        
+        .result-display, .prediction-display { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 25px; 
+            flex-wrap: wrap; 
+            margin-top: 20px; 
+        }
+
+        .result-card, .prediction-card {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            width: 250px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+            border: 2px solid transparent;
+            text-align: center;
+            min-height: 150px; /* Ensures all cards have the same height */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .result-card-title, .prediction-card-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .result-card-content, .prediction-card-content {
+            font-size: 1.6rem;
+            font-weight: 700;
+            word-wrap: break-word; /* Allows long words to wrap */
+            line-height: 1.3;
+        }
+
+        .result-card.best { border-color: #2ecc71; }
+        .result-card.best .result-card-content { color: #2ecc71; }
+
+        .result-card.worst { border-color: #e74c3c; }
+        .result-card.worst .result-card-content { color: #e74c3c; }
+        
+        /* Prediction section removed */
+        #predictionSection {
+            display: none;
+        }
+
+        /* Detail Page for Dot Clicks */
+        .detail-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            backdrop-filter: blur(5px);
+        }
+        .detail-content { font-size: 2rem; color: #2c3e50; margin-bottom: 40px; text-align: center; font-weight: 500; }
+
+        /* New Extra Info Section Styles */
+        .extra-info-section {
+            margin-top: 40px;
+            border-top: 4px solid #2c3e50;
+            padding-top: 30px;
+        }
+        .topic-container {
+            margin-bottom: 15px;
+        }
+        .topic-header {
+            background-color: #f8f9fa;
+            border: 1px solid #e0e6ed;
+            border-radius: 8px;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+        .topic-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        .topic-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: #6a11cb;
+        }
+        .topic-header span {
+            flex-grow: 1;
+            text-align: left;
+        }
+
+        .topic-header:hover {
+            background-color: #e9ecef;
+        }
+        .topic-header::after {
+            content: '▶';
+            font-size: 0.8em;
+            transition: transform 0.3s;
+            transform-origin: center;
+        }
+        .topic-header.open::after {
+            transform: rotate(90deg);
+        }
+        .topic-responses {
+            display: none;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #e0e6ed;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+        .response-items-container {
+            flex-grow: 1;
+            /* Removed overflow-x: auto; */
+        }
+        .analysis-image {
+            width: 350px;
+            height: auto;
+            border-radius: 8px;
+            flex-shrink: 0;
+            display: block; /* Show image */
+        }
+        .response-item {
+            font-size: 1rem;
+            color: #6c757d;
+            transition: all 0.3s;
+            margin-bottom: 8px;
+            text-align: left;
+            /* Removed white-space: nowrap; */
+        }
+        .response-item.highlighted {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #2575fc;
+        }
+
+        .analysis-separator {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin: 12px 0;
+            padding-top: 12px;
+            border-top: 1px dashed #ced4da;
+            text-align: left;
+            font-style: italic;
+        }
+
+        /* Scrollspy Navigation */
+        #scrollspyNav {
+            position: fixed;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            display: none; /* Controlled by JS */
+            flex-direction: column;
+            align-items: center;
+            z-index: 100;
+            gap: 25px;
+        }
+
+        .scrollspy-link {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(4px);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .scrollspy-link .topic-icon {
+            width: 20px;
+            height: 20px;
+            margin: 0;
+        }
+        .scrollspy-link .topic-icon svg {
+            fill: #2c3e50;
+            transition: fill 0.3s ease;
+        }
+
+        .scrollspy-link:hover {
+            background-color: #fff;
+            transform: scale(1.1);
+        }
+
+        .scrollspy-link.active {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            transform: scale(1.15);
+            border-color: transparent;
+        }
+
+        .scrollspy-link.active .topic-icon svg {
+            fill: white;
+        }
+
+        .scrollspy-link .tooltip {
+            position: absolute;
+            top: 50%;
+            right: 150%;
+            transform: translateY(-50%);
+            background-color: #2c3e50;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            white-space: nowrap;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .scrollspy-link:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            body { padding: 0; }
+
+            #coverPage {
+                align-items: flex-start; /* Align to top */
+                padding-top: 5vh;
+                padding-bottom: 5vh; /* Add padding for scrolling */
+                overflow-y: auto; /* Ensure scrolling */
+                display: block; /* Use block for natural scrolling */
+            }
+            
+            .container {
+                margin: 0 auto; /* Center container on mobile */
+            }
+
+            .cover-title {
+                font-size: 2.2rem;
+            }
+
+            .cover-subtitle {
+                font-size: 1rem;
+                text-align: center; /* Center explanation on mobile */
+            }
+            
+            .cover-subtitle-main, .cover-subtitle-list {
+                white-space: normal; /* Allow subtitles to wrap on mobile */
+            }
+
+            .cover-image img {
+                max-width: 280px;
+            }
+
+            .container {
+                border-radius: 0;
+                padding: 20px;
+                min-height: 100vh;
+                /* margin: 0; */ /* Removed to allow auto centering */
+            }
+            .navigation { flex-direction: column; gap: 15px; }
+            .dev-navigation { order: -1; justify-content: space-between; }
+            
+            .options-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            #scrollspyNav {
+                right: 15px;
+            }
+            .chart-wrapper {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .chart-container {
+                height: 500px; 
+                min-width: 700px;
+            }
+            .topic-responses {
+                flex-direction: column;
+            }
+            .analysis-image {
+                width: 100%;
+                max-width: 300px;
+                margin-top: 20px;
+            }
+
+            /* --- START: MOBILE FIXES --- */
+            .main-navigation {
+                display: flex;
+                flex-direction: column; /* Stack buttons vertically */
+                gap: 15px; /* Add space between buttons */
+                width: 100%; /* Make the container full-width */
+            }
+
+            .main-navigation button {
+                width: 100%; /* Make buttons take the full width */
+            }
+            /* --- END: MOBILE FIXES --- */
+        }
+        
+        /* --- Print Styles --- */
+        @media print {
+            body {
+                padding: 0;
+                background-color: #fff !important;
+                color: #000 !important; /* Force all default text to black for print */
+            }
+
+            /* Hide all non-result elements */
+            #coverPage, #mainNavigation, #devSkipBtn, #scrollspyNav, #returnToResultsBtn, #downloadResultsBtn, .print-hide {
+                display: none !important;
+            }
+
+            /* Show all result elements */
+            .container, #mainContainer, .results, #verticalChartSection, #yourResultSection, #extraInfoSection {
+                display: block !important;
+                background: #fff !important;
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                backdrop-filter: none !important;
+            }
+            
+            #mainTitle {
+                display: none !important;
+            }
+
+            .results {
+                margin-top: 0 !important;
+            }
+
+            .topic-header, .topic-responses {
+                display: block !important; /* Ensure all are visible */
+                background-color: #fff !important;
+                border: none !important;
+                page-break-inside: avoid;
+            }
+            
+            .topic-header::after {
+                display: none; /* Hide accordion arrow */
+            }
+
+            .topic-responses {
+                display: flex !important; /* Keep flex for layout */
+            }
+            
+            /* Hide image on print */
+            .analysis-image {
+                display: none !important;
+            }
+
+            .response-items-container {
+                page-break-inside: avoid;
+            }
+
+            /* --- MODIFICATION: Hide comparison analysis items --- */
+            .analysis-separator, .response-item:not(.highlighted) {
+                display: none !important; 
+            }
+            .response-item.highlighted {
+                display: block !important; /* Ensure highlighted one is visible */
+            }
+            /* --- END MODIFICATION --- */
+
+            .your-result-section {
+                page-break-before: auto;
+                page-break-inside: avoid;
+            }
+            
+            /* --- MODIFICATION: Taller graph --- */
+            .chart-container {
+                height: 600px !important; /* Increased height for print */
+                width: 100% !important;
+                page-break-inside: avoid;
+                overflow: visible !important; /* Added to prevent clipping */
+            }
+            
+            #verticalLineChart {
+                min-height: 600px !important; /* Ensure canvas height matches */
+            }
+            /* --- END MODIFICATION --- */
+            
+            .chart-wrapper {
+                overflow: visible !important; /* Prevent clipping */
+            }
+            
+            .result-card, .prediction-card {
+                background-color: #f9f9f9 !important; /* Light bg for cards */
+                border-color: #ccc !important;
+            }
+            
+            /* --- MODIFICATION: Remove compact analysis styles and keep section together --- */
+            .extra-info-section {
+                page-break-before: always; /* Force to new page */
+                page-break-inside: avoid; /* Try to keep the whole section together */
+            }
+            /* --- END MODIFICATION --- */
+            
+            .result-card.best {
+                border-color: #2ecc71 !important;
+            }
+            .result-card.worst {
+                border-color: #e74c3c !important;
+            }
+            .result-card-content {
+                color: #000 !important; /* Force text black */
+            }
+            .result-card.best .result-card-content {
+                color: #2ecc71 !important; /* Re-apply color */
+            }
+            .result-card.worst .result-card-content {
+                color: #e74c3c !important; /* Re-apply color */
+            }
+            
+            h1, h2, h3 {
+                color: #000 !important;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="coverPage">
+        <div class="container" id="coverContainer">
+            <div class="cover-content">
+                
+                <h1 class="cover-title">The ITT (Innate Traits Test)</h1>
+                <p class="cover-copyright">exclusive to ourground.ie programmes</p>
+                
+                <p class="cover-subtitle-main">DISCOVER and UNDERSTAND yourself to develop success strategies in:</p>
+                <p class="cover-subtitle-list">communications, career, relationships, sporting, success, business success</p>
+
+                <div class="cover-image">
+                    <!-- Image path updated -->
+                    <img src="copertina_libro.png" alt="Artistic representation of human perception">
+                </div>
+                <p class="cover-image-caption">Each of us perceives the world differently</p>
+                
+                <p class="cover-subtitle">Behavioural research suggests that the most effective people are those who understand themselves and how they perceive the world differently than others. We, ourground.ie, build on ancient wisdom from as far back as
+Pythagoras with the assistance of modern psychology including Carl Jung and developing neurology
+to develop the ITT programme (Innate Traits Test).<br><br>
+The ITT questionnaire enables people to DISCOVER and UNDERSTAND their unique
+personal perception, its strengths and weaknesses. ITT helps to develop strategies on how
+best to meet the demands of their personal and professional environments.</p>
+                <button id="startBtn">Begin the Evaluation</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="bg-1" class="background-container"></div>
+    <div id="bg-2" class="background-container"></div>
+    
+    <div class="container" id="mainContainer" style="display: none;">
+        <h1 id="mainTitle">Perception Evaluation</h1>
+        
+        <h2 class="page-subtitle">Unlock Your Perception</h2>
+        
+        <div class="intro-image-container" id="introImageSection">
+            <!-- Image path updated -->
+            <img src="glasses.png" alt="Varying colored glasses representing different perceptions">
+        </div>
+
+        <div class="instructions" id="instructionSection">
+            <p>This evaluation will guide you through a series of questions to reveal your unique personality profile. Discover the lens through which you see the world.</p>
+        </div>
+        
+        <div class="progress" id="progressSection">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text"><span id="progressPercent">0%</span> Complete</div>
+        </div>
+        
+        <div id="questionnaire">
+            <!-- Questions will be dynamically inserted here -->
+        </div>
+        
+        <div class="navigation" id="mainNavigation">
+            <div class="dev-navigation">
+                <button id="devSkipBtn">Dev Skip</button>
+            </div>
+            <div class="main-navigation">
+                <button id="prevBtn" disabled>Previous</button>
+                <button id="nextBtn" style="display: none;">Next</button>
+                <button id="proceedToPathBtn" style="display: none;">Evaluation complete, proceed to results</button>
+            </div>
+        </div>
+        
+        <!-- Path Selection Page (REMOVED) -->
+         <div class="path-selection" id="pathSelectionPage" style="display: none;"></div>
+
+        <!-- Personality Profile Chart Section (REMOVED) -->
+        <div class="profile-chart" id="profileChartSection" style="display: none;"></div>
+        
+        <!-- New Vertical Line Chart Section (Page 74) -->
+        <div class="results" id="verticalChartSection">
+            <h2 class="results-title" id="scoreProfileTitle"><span>Your Score Profile</span></h2>
+             <div class="chart-wrapper">
+                <div class="chart-container">
+                    <canvas id="verticalLineChart"></canvas>
+                </div>
+            </div>
+            <div id="yourResultSection" class="your-result-section">
+                <h2 class="results-title" id="yourResultTitle"><span>Your Result</span></h2>
+                <div id="resultDisplay" class="result-display">
+                    <!-- Result cards will be inserted here -->
+                </div>
+            </div>
+            <div id="predictionSection" class="prediction-section" style="display: none;">
+                <h2 class="results-title" id="predictionTitle"><span>Your Prediction</span></h2>
+                <div id="predictionDisplay" class="prediction-display">
+                    <!-- Prediction cards will be inserted here -->
+                </div>
+            </div>
+            <div id="extraInfoSection" class="extra-info-section">
+                 <h2 class="results-title" id="analysisTitle"><span>Detailed Analysis</span></h2>
+                <!-- This will be populated by JS -->
+            </div>
+             <div class="navigation" style="justify-content: center; margin-top: 20px;">
+                <button id="downloadResultsBtn">Download Results</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail page, outside main container -->
+    <div class="detail-page" id="detailPage">
+        <div id="detailContent" class="detail-content"></div>
+        <button id="returnToResultsBtn">Return to the results</button>
+    </div>
+
+    <div id="scrollspyNav"></div>
+
+
+    <script>
+        // Data derived from the uploaded image for the profile chart
+        const profileData = {
+            'A': ["SELF-DISCIPLINED", "COMPETENT", "INDUSTRIOUS", "CORRECT", "CONSCIENTIOUS", "OBJECTIVE", "RIGHT", "HONEST", "FAIR", "ACCURATE", "EXACT", "METHODICAL"],
+            'B': ["ALTRUISTIC", "CARING", "GIVING", "LOVING", "LISTENING", "HELPFUL", "NEIGHBORLY", "SUPPORTIVE", "THOUGHTFUL", "EMPATHIC", "HUMANITARIAN", "FRIENDLY"],
+            'C': ["ACHIEVING", "SELF-ASSURED", "COMPETITIVE", "ENTERPRISING", "EFFICIENT", "SUCCESSFUL", "PRODUCTIVE", "SOCIABLE", "ENERGIC", "PRACTICAL", "ADAPTIVE", "VERSATILE"],
+            'D': ["PERSONAL", "CREATIVE", "SPECIAL", "UNIQUE", "DEEP", "FACETED", "DRAMATIC", "EXPRESSIVE", "IMPRESSIVE", "SENSITIVE", "SYMPATHETIC", "AUTHENTIC"],
+            'E': ["INSIGHTFUL", "ATTENTIVE", "PERCEPTIVE", "OBSERVANT", "ANALYTIC", "REFLECTIVE", "THEORETICAL", "UNDERSTANDING", "THINKING", "DISCERNING", "RESERVED", "KNOWLEDGEABLE"],
+            'F': ["FAITHFUL", "SECURE", "RELIABLE", "LOYAL", "DEPENDABLE", "HELPFUL", "BELONGING", "BONDING", "HARDWORKING", "COLLABORATIVE", "OBEDIENT", "COMMITTED"],
+            'G': ["RESPONSIVE", "EAGER", "VIVACIOUS", "OUTGOING", "PLANNING", "FUN-LOVING", "CHEERFUL", "HAPPY", "LIGHTHEARTED", "POSITIVE", "OPTIMISTIC", "ENTHUSIASTIC"],
+            'H': ["ASSERTIVE", "ACTIVE", "DECISIVE", "BOLD", "ACTION-ORIENTED", "INDEPENDENT", "SELF-DETERMINED", "SELF-RELIANT", "CHALLENGING", "COURAGEOUS", "LEADING", "ADVENTUROUS"],
+            'I': ["STABLE", "CALM", "RELAXED", "PATIENT", "GENTLE", "EASYGOING", "ACCEPTING", "HARMONIZING", "ACCOMMODATING", "COMPLIANT", "SIMPLE", "PEACEFUL"]
+        };
+
+
+        // 72 Questions data
+        const questions = [
+            { text: "It means a lot to me to be", options: [{ text: "right about what I say and do", value: "A" },{ text: "loyal to people close to me", value: "F" }] },
+            { text: "I tend to look", options: [{ text: "on the bright side of life", value: "G" },{ text: "for ways to get ahead in life", value: "C" }] },
+            { text: "I am inclined to", options: [{ text: "listen to what my feelings are saying to me", value: "D" },{ text: "take charge and get a job done the way I want", value: "H" }] },
+            { text: "I usually try to", options: [{ text: "know the right thing to do", value: "A" },{ text: "be calm and cool in most situations", value: "I" }] },
+            { text: "I like", options: [{ text: "personal time and silence to think about my ideas", value: "E" },{ text: "to be with people whom I care about", value: "B" }] },
+            { text: "I see myself as a", options: [{ text: "fun-loving person who does new and different things", value: "G" },{ text: "strong person with the courage to take on difficult tasks", value: "H" }] },
+            { text: "I experience myself as a", options: [{ text: "sensitive person who is aware of my feelings", value: "D" },{ text: "trustworthy person who is committed to people close to me", value: "F" }] },
+            { text: "I like to", options: [{ text: "do things accurately and precisely", value: "A" },{ text: "accomplish things and get results", value: "C" }] },
+            { text: "It is important for me to", options: [{ text: "carry out my duties and do what I'm told", value: "F" },{ text: "come across well to people", value: "C" }] },
+            { text: "It means a lot to me to", options: [{ text: "be relaxed and settled", value: "I" },{ text: "do something for people in need", value: "B" }] },
+            { text: "I can easily become", options: [{ text: "concerned about issues such as suffering, loss, & death", value: "D" },{ text: "positive and optimistic about life", value: "G" }] },
+            { text: "It is important for me to", options: [{ text: "be honest and fair with people", value: "A" },{ text: "stand by my decision in the face of opposition", value: "H" }] },
+            { text: "It is important to me to", options: [{ text: "keep my commitments", value: "F" },{ text: "make a favorable impression on people", value: "C" }] },
+            { text: "I value", options: [{ text: "harmony and agreement among people", value: "I" },{ text: "knowledge and insight into situations", value: "E" }] },
+            { text: "I like", options: [{ text: "having things scheduled and following regulations", value: "F" },{ text: "cheering people up and seeing them happy", value: "G" }] },
+            { text: "I value", options: [{ text: "in a special way the joys and sadness of life", value: "D" },{ text: "the opportunities to help people", value: "B" }] },
+            { text: "I like", options: [{ text: "correcting things to better my work", value: "A" },{ text: "acquiring knowledge to know what's going on in the world", value: "E" }] },
+            { text: "I consider myself", options: [{ text: "an easy-going person", value: "I" },{ text: "a go-getter kind of person", value: "C" }] },
+            { text: "I tend to", options: [{ text: "do what I'm told by someone I respect", value: "F" },{ text: "comfort or advise people who are close to me", value: "B" }] },
+            { text: "I prefer to", options: [{ text: "exercise authority and give orders", value: "H" },{ text: "step back and observe what is happening in situations", value: "E" }] },
+            { text: "I am usually", options: [{ text: "careful to do a good job", value: "A" },{ text: "glad to have a good time with friends", value: "G" }] },
+            { text: "I am usually", options: [{ text: "in touch with my personal feelings about things", value: "D" },{ text: "determined to achieve my goals", value: "C" }] },
+            { text: "I am comfortable", options: [{ text: "following orders and having limits within which to work", value: "F" },{ text: "settling disagreements so people can get along together", value: "I" }] },
+            { text: "I usually like doing", options: [{ text: "things by myself and learning about things", value: "E" },{ text: "a variety of things and enjoying myself", value: "G" }] },
+            { text: "I find satisfaction in", options: [{ text: "being my own boss and doing what I want to do", value: "H" },{ text: "caring for others", value: "B" }] },
+            { text: "I tend to", options: [{ text: "live up to my standards and do things well", value: "A" },{ text: "feel deeply about my past and recall how things used to be", value: "D" }] },
+            { text: "It is important for me to", options: [{ text: "present a winning image to other people", value: "C" },{ text: "have time & space for myself so I can know more about things", value: "E" }] },
+            { text: "I consider myself a", options: [{ text: "dependable individual who follows orders", value: "F" },{ text: "confident person who enjoys doing things my way", value: "H" }] },
+            { text: "I like", options: [{ text: "to plan ways to enjoy life", value: "G" },{ text: "a relaxed style of life", value: "I" }] },
+            { text: "I generally", options: [{ text: "strive to better myself", value: "A" },{ text: "experience many people depending on my help", value: "B" }] },
+            { text: "I usually enjoy", options: [{ text: "works of art", value: "D" },{ text: "putting ideas together into meaningful relationships", value: "E" }] },
+            { text: "I generally", options: [{ text: "find it easy to let people know I'm dissatisfied", value: "H" },{ text: "remain untroubled about most things in life", value: "I" }] },
+            { text: "I like", options: [{ text: "people to enjoy themselves and be happy", value: "G" },{ text: "to feel close to my friends", value: "B" }] },
+            { text: "It is easy for me to", options: [{ text: "confront people to change their minds", value: "H" },{ text: "compete with people in order to succeed", value: "C" }] },
+            { text: "I believe that", options: [{ text: "the experience of symbols and art is something special", value: "D" },{ text: "most problems in life are not worth losing sleep over", value: "I" }] },
+            { text: "It is important for me to", options: [{ text: "be of service to others", value: "B" },{ text: "understand the ideas of other people", value: "E" }] },
+            { text: "It is easy for me to", options: [{ text: "feel deeply and go over things in my imagination", value: "D" },{ text: "become eager and cheerful about the future", value: "G" }] },
+            { text: "I like to", options: [{ text: "concentrate and become wrapped up in what interests me", value: "E" },{ text: "show that I care for my friends", value: "B" }] },
+            { text: "I am comfortable", options: [{ text: "facing people I disagree with", value: "H" },{ text: "getting prestige and status", value: "C" }] },
+            { text: "I like to be", options: [{ text: "reliable in relationships with people", value: "F" },{ text: "at ease and relaxed with people I meet", value: "I" }] },
+            { text: "I often think", options: [{ text: "of doing better by living up to my ideals", value: "A" },{ text: "sentimentally of the past by remembering the way things use to be", value: "D" }] },
+            { text: "I like to be with people who", options: [{ text: "are discussing concepts and theories", value: "E" },{ text: "enjoy doing different things", value: "G" }] },
+            { text: "I like", options: [{ text: "taking charge and directing other people to get things done", value: "H" },{ text: "putting other peoples' needs before my own", value: "B" }] },
+            { text: "I like to", options: [{ text: "use my time conscientiously in doing things well", value: "A" },{ text: "do things efficiently so I can get results", value: "C" }] },
+            { text: "I like", options: [{ text: "feeling safe and secure with friends I trust", value: "F" },{ text: "being on the go and doing things I enjoy", value: "G" }] },
+            { text: "I like to experience", options: [{ text: "symbols and grasp their meaning", value: "D" },{ text: "harmony among people living or working together", value: "I" }] },
+            { text: "It is important for me to", options: [{ text: "live up to my standards by improving myself and other people", value: "A" },{ text: "know what is taking place in situations and how things will turn out", value: "E" }] },
+            { text: "It is important for me to", options: [{ text: "feel that I belong to a person or group", value: "F" },{ text: "impress people in a favorable way", value: "C" }] },
+            { text: "I like to", options: [{ text: "see the positive possibilities in a situation", value: "G" },{ text: "persuade people to see things my way", value: "H" }] },
+            { text: "I like to", options: [{ text: "express my feelings in special and creative ways", value: "D" },{ text: "concentrate on understanding ideas and theories", value: "E" }] },
+            { text: "It's important for me to be", options: [{ text: "at peace with persons close to me", value: "I" },{ text: "needed by persons close to me", value: "B" }] },
+            { text: "I like to think of myself as a", options: [{ text: "just person who treats people fairly", value: "A" },{ text: "reliable person whom people can count on", value: "F" }] },
+            { text: "I like to", options: [{ text: "look on the sunny side of life", value: "G" },{ text: "achieve the goals I set", value: "C" }] },
+            { text: "I experience myself as a person", options: [{ text: "who likes to be learned and knowledgeable", value: "E" },{ text: "with the strength to meet challenges head on and take action", value: "H" }] },
+            { text: "I am important for me to", options: [{ text: "straighten out my shortcomings", value: "A" },{ text: "be steady and stable during difficult times", value: "I" }] },
+            { text: "I appreciate the", options: [{ text: "unique experience of artistic work", value: "D" },{ text: "particular experience of people needing my services", value: "B" }] },
+            { text: "It is important for me to", options: [{ text: "succeed at what I do", value: "C" },{ text: "understand what is happening in situations", value: "E" }] },
+            { text: "I like to rely on", options: [{ text: "my insights and ideas in situations", value: "E" },{ text: "the advice and directions of someone I respect", value: "F" }] },
+            { text: "It is important for me to be", options: [{ text: "careful about saying and doing the right thing", value: "A" },{ text: "optimistic about the future", value: "G" }] },
+            { text: "I find it easy to be", options: [{ text: "forceful in stating my mind in a disagreement", value: "H" },{ text: "cool and collected in a disagreement", value: "I" }] },
+            { text: "I am important for me", options: [{ text: "to be concerned about the welfare of people", value: "B" },{ text: "that my efforts make a difference in accomplishing things", value: "C" }] },
+            { text: "I like to see myself as a", options: [{ text: "right-minded person, motivated by principles and ideals", value: "A" },{ text: "confident person with strength to take on challenging tasks", value: "H" }] },
+            { text: "I like to see people", options: [{ text: "optimistic and hopeful about tomorrow", value: "G" },{ text: "calm and discussing things without arguing", value: "I" }] },
+            { text: "I like to", options: [{ text: "make sound judgements in matters of right and wrong", value: "A" },{ text: "support people by lending them a helping hand", value: "B" }] },
+            { text: "I experience myself as", options: [{ text: "sensitive to my own and other people's feelings", value: "D" },{ text: "respectful of tradition and authority", value: "F" }] },
+            { text: "It is important for me to", options: [{ text: "feel relaxed and at ease in my work", value: "I" },{ text: "succeed in my work", value: "C" }] },
+            { text: "I believe I'm", options: [{ text: "talented and good at doing different things", value: "G" },{ text: "caring and close to people I love", value: "B" }] },
+            { text: "I am comfortable", options: [{ text: "being tough with a person for his/her own good", value: "H" },{ text: "with customary and established ways of doing things", value: "F" }] },
+            { text: "I like people who", options: [{ text: "accept each other and live together in peace", value: "I" },{ text: "reflect on their ideas so their thinking is clear", value: "E" }] },
+            { text: "I tend to", options: [{ text: "experience unique ups and downs", value: "D" },{ text: "work at getting results", value: "C" }] },
+            { text: "I am inclined to be", options: [{ text: "dependable in doing work assigned to me", value: "F" },{ text: "available to assist persons in need", value: "B" }] },
+            { text: "It is important for me to be", options: [{ text: "truly aware of my pleasant or painful feelings", value: "D" },{ text: "strong in making hard decisions", value: "H" }] }
+        ];
+        // End of questions data
+
+        const categories = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
+        
+        let scores = { 'A': 0, 'B': 0, 'C': 0, 'D': 0, 'E': 0, 'F': 0, 'G': 0, 'H': 0, 'I': 0 };
+        let scoresCalculated = false;
+        let currentStep = 0;
+        const totalSteps = questions.length + 2; // 72 real questions + 2 break questions
+        let userAnswers = Array(questions.length).fill(null); 
+        
+        let animationFrameId = null;
+        let isAdvancing = false;
+        let manualNavMode = false;
+        let scrollSpyObserver;
+        
+        const extraData = {
+            "my personal focus": [
+                "I strive for excellence – i live by principals and Ideals",
+                "I serve others – I live by giving",
+                "I aim for success – I communicate well",
+                "I feel introspectively – I am creative",
+                "I gather all the facts – I outline the data",
+                "I respect tradition – I am good team player",
+                "I enjoy life – I avoid the serious",
+                "I am confident – I decide and take action",
+                "I am easygoing and calm - I am a peacemaker"
+            ],
+            "my ideal profession approach": [
+                "I FOLLOW STANDARDS AND PROCEDURES - USE CLEAR CRITERIA",
+                "I ASSIST AND NURTURE AND ENCOURAGE",
+                "I MOTIVATE TO ACCOMPLISH ACHIEVE RESULTS IN PUBLIC",
+                "I APPRECIATE INDIVIDUALITY – I IMAGINE CREATIVE POSSIBILITIES",
+                "I ORGANISE IDEAS INTO STRUCTURED VISION – I ALWAYS REVIEW",
+                "I IDENTIFY WITH THE GROUP THINK – I DELEGATE RESPONSIBILIY",
+                "I PROMOTE BY CHEERFULNESS – I KEEP THINGS LIGHT",
+                "I MAKE USE OF POWER AND AUTHORITY - I AM PERSUASIVE",
+                "I AM ACCOMODATING TO PEOPLE – I MEDIATE DIFFERENCE"
+            ],
+            "my ingrained thinking": [
+                "GUIDEDED BY HIGH NORMS AND ETHICAL PRINCIPALS",
+                "THINK OF OTHER’S NEEDS AND REASON FROM THE HEART",
+                "PROMOTE IDEAS TO INSPIRE ACTION AND SUCCESS",
+                "MOOD DOES COLOUR PERCEPTION APPROACH",
+                "INCLUDE ALL THE FACTS AND FORM EVIDENCE BASED SOLUTIONS",
+                "TRADITIONAL AND GROUP THINKING GIVES SUCCESSFUL RESULTS",
+                "POSSIBILITIES AND INNOVATION CREATES EXCITEMENT",
+                "ANIMATED DIALOGUE LEADING TO PLAN OF ACTION THAT DELIVERS",
+                "FOCUS ON WHAT IS AGREED AND PLAY DOWN CONFLICT"
+            ],
+            "i irritate others with": [
+                "SHARP CRITICISM – INTOLERENCE",
+                "INTRUSIVENESS – CONDESCENDING",
+                "SUPERIORITY ATTITUDE - FAKE –NESS",
+                "MOODYNESS - DEJECTED",
+                "ALOOFNESS - COLD ANALYSIS",
+                "CAUTIOUS - PARALYSED",
+                "MUCH TALK – A LITTLE NARSCISTIC",
+                "AGRESSIVENESS – CONTROLING",
+                "PROCRASTINATION – PARALYSIS"
+            ],
+            "i am annoyed by others": [
+                "NOT FOLLOWING RULES",
+                "UNFRIENDLINESS",
+                "SUPERIORITY",
+                "INSENSITIVITY",
+                "CONFUSED UNREASONABLE",
+                "UNREALIABLE",
+                "PESSIMESTIC",
+                "OVERPOWERING",
+                "DISAGREEABLENESS"
+            ],
+            "my positive self talk": [
+                "I AM QUALITY PERFORMER",
+                "I AM GENUINE NURTURER",
+                "I AM SUPER PERFORMER",
+                "I AM CREATIVE PRODUCER",
+                "I AM QUALITY THINKER",
+                "I AM TEAMLEADER SUPREME",
+                "I STIMULATE FUTURE IDEAS",
+                "I INICIATE ACTION AND PLANS",
+                "I AM THE ULTIMATE RECEPTIONIST"
+            ],
+            "my communication style": [
+                "AUTHORATIVE",
+                "SUPPORTIVE",
+                "PERSUASIVE",
+                "UNIQUE",
+                "WELL VERSED",
+                "CONVENTIONAL",
+                "ENTERTAINING",
+                "AUTHORITIVE",
+                "ACCEPTING"
+            ],
+            "i dislike": [
+                "RULE BREAKING - POOR PERFORMANCE",
+                "CLINICAL RESPONSE - ABSENCE OF RAPPORT",
+                "INEFFICIENCY - EMBARISING RESULTS",
+                "EVERYDAY APPROACH - ORDINARYNESS",
+                "EMOTIONAL RESPONSE - CONFUSED APPROACH",
+                "INDIVIDUALISTIC APPROACH - UNREALIABLE WORK",
+                "ROUTINE AND HABITUAL APPLICATION",
+                "UNJUST TREATMENT - CONSTRAINTS",
+                "ARGUMENTS - DISRUPTIVE APPROACH"
+            ],
+            "i appreciate others when they are": [
+                "COMPETENT AND PRINCIPALED",
+                "FRIENDLY AND HELPFUL",
+                "ENTERPRISING AND SUCCESSFUL",
+                "UNIQUE AND SENSITIVE",
+                "INFORMED AND CLEAR THINKING",
+                "TRADITIONAL AND LOYAL",
+                "OPTIMISTIC AND FUN LOVING",
+                "FAIR AND ASSERTIVE",
+                "PATIENT AND CALM"
+            ]
+        };
+
+
+        // DOM elements
+        const coverPage = document.getElementById('coverPage');
+        const startBtn = document.getElementById('startBtn');
+        const mainContainer = document.getElementById('mainContainer');
+        const mainTitle = document.getElementById('mainTitle');
+        const questionnaireEl = document.getElementById('questionnaire');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const proceedToPathBtn = document.getElementById('proceedToPathBtn');
+        const devSkipBtn = document.getElementById('devSkipBtn');
+        const verticalChartSection = document.getElementById('verticalChartSection');
+        const progressSection = document.getElementById('progressSection');
+        const instructionSection = document.getElementById('instructionSection');
+        const progressFill = document.getElementById('progressFill');
+        const progressPercentEl = document.getElementById('progressPercent');
+        const detailPage = document.getElementById('detailPage');
+        const detailContent = document.getElementById('detailContent');
+        const returnToResultsBtn = document.getElementById('returnToResultsBtn');
+        const extraInfoSectionEl = document.getElementById('extraInfoSection');
+        const scrollspyNavEl = document.getElementById('scrollspyNav');
+        const introImageSection = document.getElementById('introImageSection');
+        const pathSelectionPage = document.getElementById('pathSelectionPage');
+        const mainNavigation = document.getElementById('mainNavigation');
+        const downloadResultsBtn = document.getElementById('downloadResultsBtn');
+        
+
+        // Initialize the questionnaire
+        function showStep() {
+            isAdvancing = false;
+            verticalChartSection.style.display = 'none';
+            questionnaireEl.style.display = 'block';
+            progressSection.style.display = 'block';
+            instructionSection.style.display = 'block';
+            introImageSection.style.display = 'block';
+            scrollspyNavEl.style.display = 'none';
+            mainNavigation.style.display = 'flex';
+            
+            updateNavigationButtons();
+            
+            const answeredCount = userAnswers.filter(a => a !== null).length;
+            const percentComplete = Math.floor((answeredCount / questions.length) * 100);
+            progressPercentEl.textContent = `${percentComplete}%`;
+            progressFill.style.width = `${percentComplete}%`;
+            
+            questionnaireEl.innerHTML = '';
+
+            if (currentStep < 24) {
+                // Questions 1-24
+                displayRealQuestion(currentStep, currentStep + 1);
+            } else if (currentStep === 24) {
+                // Break Question 1 (Animals)
+                displayAnimalQuestion();
+            } else if (currentStep < 49) {
+                // Questions 25-48
+                displayRealQuestion(currentStep - 1, currentStep);
+            } else if (currentStep === 49) {
+                // Break Question 2 (Colors)
+                displayColorQuestion();
+            } else if (currentStep < totalSteps) {
+                // Questions 49-72
+                displayRealQuestion(currentStep - 2, currentStep - 1);
+            }
+        }
+
+        function displayRealQuestion(questionIndex, displayQuestionNumber) {
+            const question = questions[questionIndex];
+            questionnaireEl.innerHTML = `
+                <div class="question-container">
+                    <div class="question-number">${displayQuestionNumber}</div>
+                    <div class="question-text">${question.text}</div>
+                    <div class="options-container">
+                        ${question.options.map((option, index) => `
+                            <div class="option" data-index="${index}">
+                                <input type="radio" name="q${questionIndex}" id="option${index}" value="${index}">
+                                <label for="option${index}">${option.text}</label>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            // Set selection
+            const previousAnswer = userAnswers[questionIndex];
+            if (previousAnswer !== null) {
+                const selectedOption = questionnaireEl.querySelector(`.option[data-index="${previousAnswer}"]`);
+                if (selectedOption) {
+                    selectedOption.classList.add('selected');
+                    selectedOption.querySelector('input').checked = true;
+                }
+            }
+
+            // Add click listeners
+            document.querySelectorAll('.option').forEach(optionEl => {
+                optionEl.addEventListener('click', () => {
+                    if (isAdvancing) return;
+
+                    const selectedIndex = parseInt(optionEl.dataset.index);
+                    userAnswers[questionIndex] = selectedIndex;
+
+                    document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+                    optionEl.classList.add('selected');
+                    optionEl.querySelector('input').checked = true;
+                    
+                    autoAdvance();
+                });
+            });
+        }
+
+        function displayAnimalQuestion() {
+            // <!-- Image paths updated -->
+            questionnaireEl.innerHTML = `
+                <div class="break-question-container">
+                    <div class="question-text">Choose one</div>
+                    <div class="image-options-container">
+                        <div class="image-option" data-value="horse">
+                            <img src="horse.png" alt="Horse">
+                            <span>Horse</span>
+                        </div>
+                        <div class="image-option" data-value="frog">
+                            <img src="frog.png" alt="Frog">
+                            <span>Frog</span>
+                        </div>
+                        <div class="image-option" data-value="hare">
+                            <img src="hare.png" alt="Hare">
+                            <span>Hare</span>
+                        </div>
+                        <div class="image-option" data-value="owl">
+                            <img src="owl.png" alt="Owl">
+                            <span>Owl</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            // Add click listeners
+            document.querySelectorAll('.image-option').forEach(optionEl => {
+                optionEl.addEventListener('click', () => {
+                    if (isAdvancing) return;
+                    document.querySelectorAll('.image-option').forEach(opt => opt.classList.remove('selected'));
+                    optionEl.classList.add('selected');
+                    autoAdvance();
+                });
+            });
+        }
+
+        function displayColorQuestion() {
+            questionnaireEl.innerHTML = `
+                <div class="break-question-container">
+                    <div class="question-text">Choose one</div>
+                    <div class="color-options-container">
+                        <div class="color-option" data-value="light-purple" style="background-color: #C8A2C8;"></div>
+                        <div class="color-option" data-value="purple" style="background-color: #9b59b6;"></div>
+                        <div class="color-option" data-value="navy" style="background-color: #000080;"></div>
+                        <div class="color-option" data-value="light-blue" style="background-color: #87CEEB;"></div>
+                        <div class="color-option" data-value="green" style="background-color: #2ecc71;"></div>
+                        <div class="color-option" data-value="yellow" style="background-color: #f1c40f;"></div>
+                        <div class="color-option" data-value="orange" style="background-color: #e67e22;"></div>
+                        <div class="color-option" data-value="red" style="background-color: #e74c3c;"></div>
+                    </div>
+                </div>
+            `;
+            // Add click listeners
+            document.querySelectorAll('.color-option').forEach(optionEl => {
+                optionEl.addEventListener('click', () => {
+                    if (isAdvancing) return;
+                    document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
+                    optionEl.classList.add('selected');
+                    autoAdvance();
+                });
+            });
+        }
+
+        function autoAdvance() {
+            if (isAdvancing) return;
+            isAdvancing = true;
+            manualNavMode = false;
+            
+            if (currentStep === totalSteps - 1) { // We are on the last step
+                updateNavigationButtons();
+                isAdvancing = false;
+            } else {
+                setTimeout(() => {
+                    currentStep++;
+                    showStep();
+                }, 300);
+            }
+        }
+
+        function updateNavigationButtons() {
+            prevBtn.disabled = currentStep === 0;
+            
+            const isLastRealQuestion = (currentStep === 73);
+            const lastRealQuestionAnswered = userAnswers[71] !== null;
+
+            if (isLastRealQuestion && lastRealQuestionAnswered) {
+                proceedToPathBtn.style.display = 'inline-block';
+                nextBtn.style.display = 'none';
+            } else if (manualNavMode) {
+                nextBtn.style.display = 'inline-block';
+                proceedToPathBtn.style.display = 'none';
+            } else {
+                nextBtn.style.display = 'none';
+                proceedToPathBtn.style.display = 'none';
+            }
+        }
+
+        function devSkipToProfiles() {
+            for (let i = 0; i < questions.length; i++) {
+                userAnswers[i] = Math.floor(Math.random() * 2); 
+            }
+            currentStep = totalSteps - 1; 
+            showVerticalChart();
+        }
+
+        function calculateScores() {
+            if (scoresCalculated) return;
+            categories.forEach(cat => scores[cat] = 0);
+            userAnswers.forEach((answer, index) => {
+                if (answer !== null) {
+                    const category = questions[index].options[answer].value;
+                    scores[category]++;
+                }
+            });
+            scoresCalculated = true;
+        }
+
+        function showVerticalChart() {
+            calculateScores();
+
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+            if(scrollSpyObserver) {
+                scrollSpyObserver.disconnect();
+            }
+            
+            // Hide questionnaire elements
+            questionnaireEl.style.display = 'none';
+            progressSection.style.display = 'none';
+            instructionSection.style.display = 'none';
+            introImageSection.style.display = 'none';
+            mainNavigation.style.display = 'none';
+            
+            // Show result elements
+            mainTitle.textContent = "Evaluation Results";
+            verticalChartSection.style.display = 'block';
+
+            const resultDisplayEl = document.getElementById('resultDisplay');
+            resultDisplayEl.innerHTML = '';
+
+            const sortedScores = categories
+                .map((cat, index) => ({ type: cat, score: scores[cat], index: index }))
+                .sort((a, b) => b.score - a.score);
+
+            const highestScoringType = sortedScores[0].index;
+            const highestType = sortedScores[0].type;
+            const lowestType = sortedScores[sortedScores.length - 1].type;
+            const lowestScoringType = sortedScores[sortedScores.length - 1].index;
+            const clickableTypes = [highestType, lowestType];
+            
+            const pointColors = categories.map(cat => {
+                if (cat === highestType) return '#2ecc71'; // green
+                if (cat === lowestType) return '#e74c3c'; // red
+                return '#34495e'; // black/dark grey
+            });
+            
+            const pointBlurbs = {
+                'A': 'Tidy, organised, sort, arrange', 'B': 'Mind-protect', 'C': 'Achieve with triumph',
+                'D': 'Exception rare', 'E': 'Informed, up to date, well versed', 'F': 'custom, habit ritual',
+                'G': 'entertainment, amusing', 'H': 'control, dominance might', 'I': 'agreement, come together'
+            };
+            
+            const typeWords = {
+                'A': 'ORDER', 'B': 'CARING', 'C': 'SUCCESS', 'D': 'UNIQUENESS', 'E': 'INFORMATION', 
+                'F': 'STATUS QUO', 'G': 'FUN', 'H': 'POWER', 'I': 'PEACE'
+            };
+
+             const typeFonts = {
+                'A': 'Cinzel',          // ORDER - Classic, sharp serif
+                'B': 'Kalam',           // CARING - Friendly, handwritten
+                'C': 'Poppins',         // SUCCESS - Modern, clean sans-serif
+                'D': 'Special Elite',   // UNIQUENESS - Typewriter, distinct
+                'E': 'Roboto Mono',     // INFORMATION - Monospaced, techy
+                'F': 'EB Garamond',     // STATUS QUO - Traditional, formal serif
+                'G': 'Comfortaa',       // FUN - Rounded, playful sans-serif
+                'H': 'Oswald',          // POWER - Strong, but not overly thick sans-serif
+                'I': 'Raleway'          // PEACE - Clean, elegant sans-serif
+            };
+
+            const typeIcons = {
+                'A': new Path2D("M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z"), // order/list
+                'B': new Path2D("M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"), // heart
+                'C': new Path2D("M19,2H5A3,3 0 0,0 2,5V6.32C2.4,6.14 2.83,6 3.3,6H20.7C21.17,6 21.6,6.14 22,6.32V5A3,3 0 0,0 19,2M20.7,8H3.3C2.83,8 2.4,8.14 2,8.32V19A3,3 0 0,0 5,22H19A3,3 0 0,0 22,19V8.32C21.6,8.14 21.17,8 20.7,8M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M7,15H17V17H7V15M12,18A3,3 0 0,0 15,15H9A3,3 0 0,0 12,18Z"), // trophy
+                'D': new Path2D("M12,2L17,9L12,16L7,9L12,2M12,22L19,15L12,8L5,15L12,22Z"), // diamond
+                'E': new Path2D("M18,22A2,2 0 0,0 20,20V4A2,2 0 0,0 18,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18M13,4H18V13.1L15.5,11.5L13,13.1V4Z"), // book
+                'F': new Path2D("M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1Z"), // shield
+                'G': new Path2D("M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"), // star
+                'H': new Path2D("M16,13V21H8V13H2L12,3L22,13H16M14,14H10V19H14V14Z"), // crown-like building
+                'I': new Path2D("M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6Z") // peace/harmony
+            };
+            
+            const topicIcons = {
+                "my personal focus": `<svg viewBox="0 0 24 24"><path d="M12,4C7.45,4 3.42,7.44 2,12C3.42,16.56 7.45,20 12,20C16.55,20 20.58,16.56 22,12C20.58,7.44 16.55,4 12,4M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z" /></svg>`,
+                "my ideal profession approach": `<svg viewBox="0 0 24 24"><path d="M20,6C20,4.89 19.11,4 18,4H6C4.89,4 4,4.89 4,6V20C4,21.11 4.89,22 6,22H18C19.11,22 20,21.11 20,20V6M14,18H6V16H14V18M18,14H6V12H18V14M18,10H6V8H18V10Z" /></svg>`,
+                "my ingrained thinking": `<svg viewBox="0 0 24 24"><path d="M12,2A7,7 0 0,0 5,9C5,11.38 6.19,13.47 8,14.74V17A1,1 0 0,0 9,18H15A1,1 0 0,0 16,17V14.74C17.81,13.47 19,11.38 19,9A7,7 0 0,0 12,2M9,21A1,1 0 0,0 10,22H14A1,1 0 0,0 15,21V20H9V21Z" /></svg>`,
+                "i irritate others with": `<svg viewBox="0 0 24 24"><path d="M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22 12,22C17.53,22 22,17.53 22,12C22,6.47 17.53,2 12,2M12,20C7.58,20 4,16.42 4,12C4,7.58 7.58,4 12,4C16.42,4 20,7.58 20,12C20,16.42 16.42,20 12,20M15.5,8C16.33,8 17,8.67 17,9.5C17,10.33 16.33,11 15.5,11C14.67,11 14,10.33 14,9.5C14,8.67 14.67,8 15.5,8M8.5,8C9.33,8 10,8.67 10,9.5C10,10.33 9.33,11 8.5,11C7.67,11 7,10.33 7,9.5C7,8.67 7.67,8 8.5,8M12,14C10.67,14 9.5,14.89 9,16H15C14.5,14.89 13.33,14 12,14Z" /></svg>`,
+                "i am annoyed by others": `<svg viewBox="0 0 24 24"><path d="M12,2C17.52,2 22,6.48 22,12C22,17.52 17.52,22 12,22C6.48,22 2,17.52 2,12C2,6.48 6.48,2 12,2M12,4C7.58,4 4,7.58 4,12C4,16.42 7.58,20 12,20C16.42,20 20,16.42 20,12C20,7.58 16.42,4 12,4M15.5,11C16.33,11 17,10.33 17,9.5C17,8.67 16.33,8 15.5,8C14.67,8 14,8.67 14,9.5C14,10.33 14.67,11 15.5,11M8.5,11C9.33,11 10,10.33 10,9.5C10,8.67 9.33,8 8.5,8C7.67,8 7,8.67 7,9.5C7,10.33 7.67,11 8.5,11M12,13.5C9.82,13.5 7.93,14.81 7,16.5C8.04,17.82 9.87,18.5 12,18.5C14.13,18.5 15.96,17.82 17,16.5C16.07,14.81 14.18,13.5 12,13.5Z" /></svg>`,
+                "my positive self talk": `<svg viewBox="0 0 24 24"><path d="M20,2H4C2.9,2 2,2.9 2,4V22L6,18H20C21.1,18 22,17.1 22,16V4C22,2.9 21.1,2 20,2M13,11H15V13H13V15H11V13H9V11H11V9H13V11Z" /></svg>`,
+                "my communication style": `<svg viewBox="0 0 24 24"><path d="M12,3C17.5,3 22,6.58 22,11C22,15.42 17.5,19 12,19C11.1,19 10.23,18.9 9.4,18.73L5,21V16.74C3.12,15.31 2,13.28 2,11C2,6.58 6.5,3 12,3Z" /></svg>`,
+                "i dislike": `<svg viewBox="0 0 24 24"><path d="M12,2C17.5,2 22,6.5 22,12C22,17.5 17.5,22 12,22C6.5,22 2,17.5 2,12C2,6.5 6.5,2 12,2M17,13H7V11H17V13Z" /></svg>`,
+                "i appreciate others when they are": `<svg viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M11,16.5L18,9.5L16.59,8.09L11,13.67L7.91,10.59L6.5,12L11,16.5Z" /></svg>`
+            };
+            
+            function createCard(typeIndex, className) {
+                if(typeIndex === null || typeIndex < 0) return '';
+                const category = categories[typeIndex];
+                const word = typeWords[category];
+                const font = typeFonts[category];
+                
+                const cardClass = 'result-card';
+                const contentClass = 'result-card-content';
+                const titleClass = 'result-card-title';
+                
+                let title = '';
+                if(className === 'best') title = 'HIGH SCORE'; /* Changed from BEST SCORE */
+                else if (className === 'worst') title = 'LOW SCORE';
+                
+                return `
+                    <div class="${cardClass} ${className}">
+                        <div class="${titleClass}">${title}</div>
+                        <div class="${contentClass}" style="font-family: '${font}', sans-serif;">
+                            ${typeIndex + 1}. ${word}
+                        </div>
+                    </div>
+                `;
+            };
+
+            const bestResultCard = createCard(highestScoringType, 'best');
+            const worstResultCard = createCard(sortedScores[8].index, 'worst');
+            resultDisplayEl.innerHTML = bestResultCard + worstResultCard;
+
+            const canvas = document.getElementById('verticalLineChart');
+            const ctx = canvas.getContext('2d');
+            
+            // Create gradients
+            const lineGradient = ctx.createLinearGradient(0, 0, 0, 500);
+            lineGradient.addColorStop(0, '#6a11cb');
+            lineGradient.addColorStop(1, '#2575fc');
+
+            const fillGradient = ctx.createLinearGradient(0, 0, 0, 500);
+            fillGradient.addColorStop(0, 'rgba(37, 117, 252, 0.4)');
+            fillGradient.addColorStop(1, 'rgba(106, 17, 203, 0.05)');
+
+            const shadowPlugin = {
+                id: 'shadowPlugin',
+                beforeDatasetsDraw: (chart) => {
+                    const { ctx } = chart;
+                    ctx.save();
+                    ctx.shadowColor = 'rgba(37, 117, 252, 0.5)';
+                    ctx.shadowBlur = 15;
+                    ctx.shadowOffsetX = 0;
+                    ctx.shadowOffsetY = 4;
+                },
+                afterDatasetsDraw: (chart) => {
+                    chart.ctx.restore();
+                }
+            };
+
+            const customDrawingPlugin = {
+                id: 'customDrawing',
+                afterDraw: (chart) => {
+                    const { ctx, chartArea, scales: { y } } = chart;
+                    if (!chart.getDatasetMeta(0).data.length) return;
+                    const datapoints = chart.getDatasetMeta(0).data;
+                    const isMobile = chart.width < 768;
+                    const yAxisLabelAreaWidth = chart.chartArea.left; 
+
+                    ctx.save();
+                    
+                    y.ticks.forEach((tick, index) => {
+                        const yPos = y.getPixelForTick(index);
+                        const category = categories[index];
+                        const word = typeWords[category];
+                        const number = `${index + 1}`;
+                        const color = pointColors[index];
+                        const pointX = datapoints[index].x;
+
+                        const isFaded = ![highestType, lowestType].includes(category);
+                        ctx.globalAlpha = isFaded ? 0.6 : 1.0;
+
+                        if (isMobile) {
+                            // Mobile specific drawing
+                            ctx.fillStyle = color;
+                            const iconSize = 12;
+                            const wordFontSize = 14;
+                            
+                            const iconX = 5;
+                            const iconY = yPos - (iconSize / 2);
+                            
+                            ctx.save();
+                            ctx.translate(iconX, iconY);
+                            const scale = iconSize / 24;
+                            ctx.scale(scale, scale);
+                            ctx.fill(typeIcons[category]);
+                            ctx.restore();
+
+                            ctx.font = `bold ${wordFontSize}px '${typeFonts[category]}'`;
+                            ctx.textAlign = 'left';
+                            ctx.textBaseline = 'middle';
+                            const textStartX = iconX + iconSize + 8;
+                            ctx.fillText(word, textStartX, yPos);
+
+                            const textWidth = ctx.measureText(word).width;
+                            const lineStartX = textStartX + textWidth + 5; // Add a small padding
+
+                            ctx.beginPath();
+                            ctx.setLineDash([2, 3]);
+                            ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+                            ctx.lineWidth = 1;
+                            ctx.moveTo(lineStartX, yPos);
+                            ctx.lineTo(pointX - 12, yPos);
+                            ctx.stroke();
+
+                        } else {
+                            // Desktop drawing
+                            const iconSize = 16;
+                            const wordFontSize = 18;
+                            const numberFontSize = 16;
+                            const padding = { x: 10, inner: 8 };
+
+                            ctx.font = `bold ${wordFontSize}px '${typeFonts[category]}'`;
+                            const wordWidth = ctx.measureText(word).width;
+
+                            const pillHeight = 32;
+                            const pillWidth = padding.x + iconSize + padding.inner + wordWidth + padding.x;
+                            const pillX = 5; 
+                            const pillY = yPos - pillHeight / 2;
+
+
+                            ctx.fillStyle = 'rgba(240, 244, 249, 0.7)';
+                            ctx.beginPath();
+                            ctx.roundRect(pillX, pillY, pillWidth, pillHeight, pillHeight / 2);
+                            ctx.fill();
+
+                            ctx.fillStyle = color;
+                            const iconX = pillX + padding.x;
+                            const iconY = yPos - (iconSize / 2);
+                            ctx.save();
+                            ctx.translate(iconX, iconY);
+                            const scale = iconSize / 24;
+                            ctx.scale(scale, scale);
+                            ctx.fill(typeIcons[category]);
+                            ctx.restore();
+
+
+                            ctx.font = `bold ${wordFontSize}px '${typeFonts[category]}'`;
+                            ctx.textAlign = 'left';
+                            ctx.textBaseline = 'middle';
+                            ctx.fillText(word, iconX + iconSize + padding.inner, yPos);
+                        
+                            ctx.beginPath();
+                            ctx.setLineDash([2, 3]);
+                            ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+                            ctx.lineWidth = 1;
+                            ctx.moveTo(pillX + pillWidth, yPos);
+                            ctx.lineTo(pointX - 12, yPos);
+                            ctx.stroke();
+
+                            ctx.font = `bold ${numberFontSize}px 'Segoe UI'`;
+                            ctx.textAlign = 'right';
+                            ctx.textBaseline = 'middle';
+                            ctx.fillText(number, yAxisLabelAreaWidth - 10, yPos);
+                        }
+                    });
+                    
+                    ctx.setLineDash([]); // Reset line dash
+                    ctx.globalAlpha = 1.0;
+                    
+                    ctx.restore();
+                }
+            };
+            
+            if (window.verticalChart) {
+                window.verticalChart.destroy();
+            }
+            
+            const isMobile = window.innerWidth < 768;
+            
+            window.verticalChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: categories, 
+                    datasets: [{
+                        label: 'Your Score',
+                        data: categories.map(cat => scores[cat]),
+                        borderColor: lineGradient,
+                        backgroundColor: fillGradient,
+                        fill: 'origin',
+                        tension: 0.4,
+                        borderWidth: 4,
+                        pointBackgroundColor: 'white',
+                        pointBorderColor: pointColors,
+                        pointRadius: 9,
+                        pointBorderWidth: 3,
+                        pointHoverRadius: 15,
+                        pointHoverBorderWidth: 4,
+                        pointHoverBackgroundColor: 'white',
+                    }]
+                },
+                plugins: [shadowPlugin, customDrawingPlugin],
+                options: {
+                    animation: {
+                        duration: 1500,
+                        easing: 'easeInOutCubic'
+                    },
+                    indexAxis: 'y', 
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            left: isMobile ? 130 : 190, 
+                            right: 50
+                        }
+                    },
+                    scales: {
+                        x: { 
+                            beginAtZero: true,
+                            max: 17, /* Changed from 16 to 17 to give dot space */
+                            grid: { 
+                                color: '#e0e6ed',
+                                border: {
+                                    dash: [4, 4]
+                                }
+                             }, 
+                            title: { 
+                                display: true, 
+                                text: 'Score (%)',
+                                font: {
+                                    family: 'Poppins',
+                                    size: 14
+                                }
+                             },
+                             ticks: {
+                                color: '#000', // Force tick labels to be black
+                                callback: function(value) {
+                                    // Only show labels up to 100% (value 16)
+                                    if (value > 16) return null;
+                                    return (value / 16 * 100).toFixed(0) + '%';
+                                }
+                             }
+                        },
+                        y: { 
+                            grid: { display: false }, 
+                            ticks: { 
+                                display: false 
+                            }
+                        }
+                    },
+                    plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const elementIndex = elements[0].index;
+                            const category = categories[elementIndex];
+                            
+                            if (clickableTypes.includes(category)) {
+                                detailContent.textContent = pointBlurbs[category];
+                                detailPage.style.display = 'flex';
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Populate extra info section
+            extraInfoSectionEl.innerHTML = ' <h2 class="results-title" id="analysisTitle"><span>Detailed Analysis</span></h2>';
+            for(const topic in extraData) {
+                const topicContainer = document.createElement('div');
+                topicContainer.className = 'topic-container';
+                topicContainer.id = `topic-${topic.replace(/\s+/g, '-')}`;
+
+                const topicHeader = document.createElement('div');
+                topicHeader.className = 'topic-header';
+                const formattedTopic = topic.charAt(0).toUpperCase() + topic.slice(1);
+                topicHeader.innerHTML = `
+                    <div class="topic-icon">${topicIcons[topic.toLowerCase()] || ''}</div>
+                    <span>${formattedTopic}</span>
+                `;
+
+                const topicResponses = document.createElement('div');
+                topicResponses.className = 'topic-responses';
+                
+                const responseItemsContainer = document.createElement('div');
+                responseItemsContainer.className = 'response-items-container';
+
+                // 1. Add the highlighted response first
+                const highlightedResponseText = extraData[topic][highestScoringType];
+                const highlightedEl = document.createElement('div');
+                highlightedEl.className = 'response-item highlighted';
+                highlightedEl.textContent = `${highestScoringType + 1}. ${highlightedResponseText.charAt(0).toUpperCase() + highlightedResponseText.slice(1).toLowerCase()}`;
+                responseItemsContainer.appendChild(highlightedEl);
+
+                const separator = document.createElement('p');
+                separator.className = 'analysis-separator';
+                separator.textContent = 'For comparison, the other profile results are:';
+                responseItemsContainer.appendChild(separator);
+
+                // 2. Add the rest of the responses
+                extraData[topic].forEach((responseText, index) => {
+                    if (index === highestScoringType) {
+                        return; // Skip the one we already added
+                    }
+                    const responseEl = document.createElement('div');
+                    responseEl.className = 'response-item';
+                    responseEl.textContent = `${index + 1}. ${responseText.charAt(0).toUpperCase() + responseText.slice(1).toLowerCase()}`;
+                    responseItemsContainer.appendChild(responseEl);
+                });
+
+                topicResponses.appendChild(responseItemsContainer);
+
+                const analysisImage = document.createElement('img');
+                analysisImage.src = 'glasses.png'; // <!-- Image path updated -->
+                analysisImage.alt = 'Analysis Illustration';
+                analysisImage.className = 'analysis-image';
+                topicResponses.appendChild(analysisImage);
+
+                topicHeader.addEventListener('click', () => {
+                    const isOpening = !topicHeader.classList.contains('open');
+
+                    // Close all others
+                    extraInfoSectionEl.querySelectorAll('.topic-header').forEach(h => h.classList.remove('open'));
+                    extraInfoSectionEl.querySelectorAll('.topic-responses').forEach(r => r.style.display = 'none');
+
+                    // If we are opening this one, open it
+                    if (isOpening) {
+                        topicHeader.classList.add('open');
+                        topicHeader.nextElementSibling.style.display = 'flex';
+                    }
+                });
+
+
+                topicContainer.appendChild(topicHeader);
+                topicContainer.appendChild(topicResponses);
+                extraInfoSectionEl.appendChild(topicContainer);
+            }
+
+            // Build and show scrollspy
+            buildScrollspy();
+            scrollspyNavEl.style.display = 'flex';
+            activateScrollSpy();
+
+            verticalChartSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+
+        // Event listeners
+        prevBtn.addEventListener('click', () => { 
+            if (currentStep > 0) { 
+                manualNavMode = true;
+                isAdvancing = false;
+                currentStep--; 
+                showStep();
+            } 
+        });
+
+        nextBtn.addEventListener('click', () => {
+             if (manualNavMode && currentStep < totalSteps - 1) {
+                currentStep++;
+                showStep();
+            }
+        });
+        
+        proceedToPathBtn.addEventListener('click', showVerticalChart);
+        devSkipBtn.addEventListener('click', devSkipToProfiles);
+        
+        returnToResultsBtn.addEventListener('click', () => {
+            detailPage.style.display = 'none';
+        });
+
+        startBtn.addEventListener('click', () => {
+            coverPage.classList.add('hidden');
+            mainContainer.style.display = 'block';
+            showStep();
+            changeBackground();
+            setInterval(changeBackground, 30000);
+        });
+
+        function buildScrollspy() {
+            scrollspyNavEl.innerHTML = '';
+
+            const scrollspyIcons = {
+                'scoreProfileTitle': `<svg viewBox="0 0 24 24"><path d="M22,21H2V3H4V19H6V10H8V19H10V6H12V19H14V11H16V19H18V7H20V19H22V21Z" /></svg>`,
+                'yourResultTitle': `<svg viewBox="0 0 24 24"><path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" /></svg>`,
+                'analysisTitle': `<svg viewBox="0 0 24 24"><path d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L21.5,20L20,21.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5A4.5,4.5 0 0,0 5,9.5A4.5,4.5 0 0,0 9.5,14A4.5,4.5 0 0,0 14,9.5A4.5,4.5 0 0,0 9.5,5Z" /></svg>`
+            };
+
+            // Add icons to titles
+            for (const id in scrollspyIcons) {
+                const titleEl = document.getElementById(id);
+                if(titleEl && !titleEl.querySelector('.topic-icon')){
+                    const iconEl = document.createElement('div');
+                    iconEl.className = 'topic-icon';
+                    iconEl.innerHTML = scrollspyIcons[id];
+                    titleEl.prepend(iconEl);
+                }
+            }
+
+
+            const sections = [
+                {id: 'scoreProfileTitle', name: 'Score Profile'},
+                {id: 'yourResultTitle', name: 'Your Result'},
+                {id: 'analysisTitle', name: 'Detailed Analysis'}
+            ];
+            
+            sections.forEach(section => {
+                const link = document.createElement('a');
+                link.className = 'scrollspy-link';
+                link.href = `#${section.id}`;
+                link.dataset.targetId = section.id;
+                link.innerHTML = `
+                    <div class="topic-icon">${scrollspyIcons[section.id] || ''}</div>
+                    <span class="tooltip">${section.name}</span>
+                `;
+                scrollspyNavEl.appendChild(link);
+            });
+        }
+        
+        function activateScrollSpy(){
+             const sections = document.querySelectorAll('.results .results-title');
+
+             scrollSpyObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const id = entry.target.id;
+                    const link = scrollspyNavEl.querySelector(`a[href="#${id}"]`);
+                    if(entry.isIntersecting) {
+                        scrollspyNavEl.querySelectorAll('.scrollspy-link').forEach(l => l.classList.remove('active'));
+                        if(link) link.classList.add('active');
+                    }
+                });
+
+             }, { rootMargin: "-50% 0px -50% 0px" });
+
+             sections.forEach(section => scrollSpyObserver.observe(section));
+        }
+
+
+        // Background Image Changer
+        const bgElements = [document.getElementById('bg-1'), document.getElementById('bg-2')];
+        let currentBg = 0;
+        const bgKeywords = ['nature', 'landscape', 'mountains', 'forest', 'ocean', 'sky', 'river'];
+
+        function changeBackground() {
+            const nextBg = (currentBg + 1) % 2;
+            const keyword = bgKeywords[Math.floor(Math.random() * bgKeywords.length)];
+            const newUrl = `https://source.unsplash.com/1920x1080/?${keyword}`;
+            
+            const img = new Image();
+            img.onload = () => {
+                bgElements[nextBg].style.backgroundImage = `url(${newUrl})`;
+                bgElements[nextBg].style.opacity = 1;
+                bgElements[currentBg].style.opacity = 0;
+                currentBg = nextBg;
+            };
+            img.src = newUrl;
+        }
+
+        // Download/Print Function
+        downloadResultsBtn.addEventListener('click', () => {
+            // 1. Expand all analysis sections
+            const headers = extraInfoSectionEl.querySelectorAll('.topic-header');
+            const responses = extraInfoSectionEl.querySelectorAll('.topic-responses');
+            headers.forEach(h => h.classList.add('open'));
+            responses.forEach(r => {
+                r.style.display = 'flex';
+                // --- MODIFICATION: Removed code that hides comparison items ---
+            });
+
+            // 2. Trigger print dialog
+            window.print();
+
+            // 3. (Optional) Re-hide comparison items after print dialog closes
+            // Use a timeout to ensure it happens after the print job is sent
+            setTimeout(() => {
+                // --- MODIFICATION: Removed code that un-hides comparison items ---
+                // Note: We leave the accordions open. User can close them if they want.
+            }, 1000); 
+        });
+
+    </script>
+</body>
+</html>
+
+
+
