@@ -81,6 +81,15 @@
             color: #2c3e50;
         }
         
+        .cover-title .itt-logo {
+            font-family: 'Comfortaa', cursive; /* Set font to Comfortaa */
+            font-weight: 400; 
+            font-size: 1.0em; 
+            vertical-align: middle; 
+        }
+        
+        /* REMOVED the .itt-num style rule */
+        
         .cover-copyright {
             font-size: 0.8rem;
             font-style: italic;
@@ -97,26 +106,12 @@
             white-space: nowrap; /* Keep on one line */
         }
         
-        .cover-subtitle-list {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1rem;
-            font-style: normal;
-            margin-bottom: 2rem;
-            color: #555;
-            white-space: nowrap; /* Keep on one line */
+        .cover-subtitle .itt-logo-text {
+            font-family: 'Comfortaa', cursive; /* Set font to Comfortaa */
+            font-weight: 400; 
         }
 
-        .cover-subtitle {
-            font-family: 'Raleway', sans-serif;
-            font-size: 1rem;
-            margin-bottom: 2.5rem;
-            color: #555;
-            line-height: 1.7;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            text-align: left; /* Make long text left-aligned */
-        }
+        /* REMOVED the .itt-num style rule */
 
         #startBtn {
             font-family: 'Poppins', sans-serif;
@@ -959,7 +954,7 @@
         <div class="container" id="coverContainer">
             <div class="cover-content">
                 
-                <h1 class="cover-title">The ITT 1 (Innate Traits Test)</h1>
+                <h1 class="cover-title">The <span class="itt-logo">ITT 1</span> (Innate Traits Test)</h1>
                 <p class="cover-copyright">exclusive to <b>ourground.ie</b> programmes</p>
                 
                 <p class="cover-subtitle-main">DISCOVER and UNDERSTAND yourself to develop success strategies in:</p>
@@ -973,9 +968,9 @@
                 
                 <p class="cover-subtitle">Behavioural research suggests that the most effective people are those who understand themselves and how they perceive the world differently than others. We, <b>ourground.ie</b>, build on ancient wisdom from as far back as
 Pythagoras with the assistance of modern psychology including Carl Jung and developing neurology
-to develop the ITT 1 programme (Innate Traits Test).<br><br>
-The ITT 1 questionnaire enables people to DISCOVER and UNDERSTAND their unique
-personal perception, its strengths and weaknesses. ITT 1 helps to develop strategies on how
+to develop the <span class="itt-logo-text">ITT 1</span> programme (Innate Traits Test).<br><br>
+The <span class="itt-logo-text">ITT 1</span> questionnaire enables people to DISCOVER and UNDERSTAND their unique
+personal perception, its strengths and weaknesses. <span class="itt-logo-text">ITT 1</span> helps to develop strategies on how
 best to meet the demands of their personal and professional environments.</p>
                 <button id="startBtn">Begin the Evaluation</button>
             </div>
@@ -2065,6 +2060,21 @@ best to meet the demands of their personal and professional environments.</p>
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
